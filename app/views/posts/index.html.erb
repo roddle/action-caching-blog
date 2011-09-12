@@ -11,7 +11,7 @@
   </tr>
 
 <% @posts.each do |post| %>
-  <tr>
+  <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
     <td><%= post.name %></td>
     <td><%= post.title %></td>
     <td><%= post.content %></td>

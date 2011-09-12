@@ -1,12 +1,18 @@
 class PostsController < ApplicationController
 
-  before_filter :authenticate, :except => [:index, :show]
+  before_filter  :authenticate, :except => [:index, :show]
+  
+  caches_action  :index
+  caches_action  :show
+  
+  cache_sweeper  :post_sweeper, 
+                 :except => [:new, :edit]
 
   # GET /posts
   # GET /posts.xml
   
   def index
-    @posts = Post.all
+    @posts = Post.find(:all, :limit => 20)
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @posts }
@@ -28,7 +34,6 @@ class PostsController < ApplicationController
   # GET /posts/new.xml
   def new
     @post = Post.new
-
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @post }
@@ -42,9 +47,11 @@ class PostsController < ApplicationController
 
   # POST /posts
   # POST /posts.xml
-  def create
+  def create    
     @post = Post.new(params[:post])
-
+    
+    # expire_page :action => :index
+    
     respond_to do |format|
       if @post.save
         format.html { redirect_to(@post, :notice => 'Post was successfully created.') }
@@ -58,8 +65,11 @@ class PostsController < ApplicationController
 
   # PUT /posts/1
   # PUT /posts/1.xml
-  def update
+  def update    
     @post = Post.find(params[:id])
+
+    # expire_page :action => :index
+    # expire_page :action => :show, :id => @post
 
     respond_to do |format|
       if @post.update_attributes(params[:post])
@@ -77,6 +87,9 @@ class PostsController < ApplicationController
   def destroy
     @post = Post.find(params[:id])
     @post.destroy
+
+    # expire_page :action => :index
+    # expire_page :action => :show, :id => @post
 
     respond_to do |format|
       format.html { redirect_to(posts_url) }

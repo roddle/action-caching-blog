@@ -1,7 +1,9 @@
 class CommentsController < ApplicationController
 
   before_filter :authenticate, :only => :destroy
-
+  
+  cache_sweeper  :comment_sweeper
+  
   def create
     @post = Post.find(params[:post_id])
     @comment = @post.comments.create(params[:comment])

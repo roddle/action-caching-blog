@@ -1,3 +1,10 @@
+SWEEPER IS USED FOR BOTH POSTS AND COMMENTS
+
+ACTION CACHING PLACED, NO PAGE CACHING AT ALL
+
+NEXT STEP IN BLOG4, ADD THE DALLI GEM AND PUT THE APP UP ON HEROKU
+
+
 == Welcome to Rails
 
 Rails is a web-application framework that includes everything needed to create
